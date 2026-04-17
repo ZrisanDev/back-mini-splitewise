@@ -1,0 +1,6 @@
+@back_api_splitwise_HostAddress = http://localhost:5180
+
+GET {{back_api_splitwise_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

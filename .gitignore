@@ -1,0 +1,57 @@
+## --- .NET ---
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+publish/
+TestResults/
+*.trx
+*.coveragereport
+*.opencoverxml
+
+## --- IDEs ---
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+## --- ARCHIVOS DE USUARIO Y SECRETOS ---
+# Tus reglas específicas de .env
+.env*
+.env
+!.env.example
+
+# Configuración de la App (Ignoramos variantes locales/secretas)
+appsettings.*.json
+!appsettings.json
+
+# Base de datos local (SQLite)
+app.db
+*.db-shm
+*.db-wal
+
+## --- SISTEMA ---
+.DS_Store
+Thumbs.db
+
+## --- OTROS ---
+dist/
+node_modules/
+out/
+[Ll]og/
+logs/
+*.log

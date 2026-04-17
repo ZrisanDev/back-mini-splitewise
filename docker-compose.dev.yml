@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # SQL Server para desarrollo/producción
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: splitwise-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P YourStrong\!Passw0rd -Q "SELECT 1"
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - splitwise-network
+
+  # Opción: SQLite para desarrollo rápido (sin Docker)
+  # Comentado por defecto - descomentar si querés usar SQLite
+  # Para usar SQLite: no necesitás Docker, solo levantar la app con dotnet run
+
+volumes:
+  sqlserver_data:
+    driver: local
+
+networks:
+  splitwise-network:
+    driver: bridge
