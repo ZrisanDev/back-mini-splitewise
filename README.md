@@ -25,6 +25,7 @@ Backend API para gestión de gastos compartidos entre grupos de personas, inspir
 ## 📋 Requisitos
 
 ### Opcionales (se puede usar SQLite sin Docker)
+
 - Docker y Docker Compose para SQL Server
 - .NET 10.0 SDK
 
@@ -84,11 +85,13 @@ back-api-splitwise/
 ### Opción 1: Con SQL Server en Docker (Recomendado) 🐳
 
 #### 1. Copiar archivo de configuración
+
 ```bash
 cp appsettings.json.example appsettings.json
 ```
 
 #### 2. Crear archivo de variables de entorno
+
 ```bash
 # Crear .env con tus secretos (NO commitear a git)
 cat > .env << 'EOF'
@@ -102,6 +105,7 @@ EOF
 ```
 
 #### 3. Iniciar SQL Server con Docker Compose
+
 ```bash
 docker-compose up -d
 ```
@@ -109,6 +113,7 @@ docker-compose up -d
 **Nota**: Primera vez puede tardar ~2-3 minutos en descargar la imagen.
 
 #### 4. Aplicar migraciones
+
 ```bash
 # Agregar dotnet tools al PATH si es necesario
 export PATH="$PATH:$HOME/.dotnet/tools"
@@ -118,11 +123,13 @@ dotnet ef database update --connection "Server=localhost,1433;Database=splitwise
 ```
 
 #### 5. Ejecutar la API
+
 ```bash
 dotnet run
 ```
 
 La API estará disponible en:
+
 - **API**: http://localhost:5180
 - **Swagger**: http://localhost:5180/swagger
 
@@ -131,15 +138,18 @@ La API estará disponible en:
 ### Opción 2: Con SQLite (Sin Docker) 💾
 
 #### 1. Configurar SQLite
+
 El proyecto está configurado para usar SQLite por defecto si la connection string es "Data Source=app.db".
 
 #### 2. Aplicar migraciones
+
 ```bash
 export PATH="$PATH:$HOME/.dotnet/tools"
 dotnet ef database update
 ```
 
 #### 3. Ejecutar la API
+
 ```bash
 dotnet run
 ```
@@ -149,52 +159,59 @@ dotnet run
 ## 📡 Endpoints de la API
 
 ### Autenticación (`/api/auth`)
-| Método | Endpoint | Descripción | Auth |
-|---------|-----------|-------------|-------|
-| POST | `/api/auth/register` | Registrar nuevo usuario | ❌ |
-| POST | `/api/auth/login` | Login y obtener tokens | ❌ |
-| POST | `/api/auth/refresh` | Renovar access token | ❌ |
-| POST | `/api/auth/logout` | Revocar refresh token | ✅ |
+
+| Método | Endpoint             | Descripción             | Auth |
+| ------ | -------------------- | ----------------------- | ---- |
+| POST   | `/api/auth/register` | Registrar nuevo usuario | ❌   |
+| POST   | `/api/auth/login`    | Login y obtener tokens  | ❌   |
+| POST   | `/api/auth/refresh`  | Renovar access token    | ❌   |
+| POST   | `/api/auth/logout`   | Revocar refresh token   | ✅   |
 
 ### Usuarios (`/api/users`)
-| Método | Endpoint | Descripción | Auth |
-|---------|-----------|-------------|-------|
-| GET | `/api/users/me` | Obtener perfil del usuario actual | ✅ |
-| PUT | `/api/users/me` | Actualizar perfil del usuario actual | ✅ |
-| PUT | `/api/users/me/password` | Cambiar contraseña del usuario actual | ✅ |
+
+| Método | Endpoint                 | Descripción                           | Auth |
+| ------ | ------------------------ | ------------------------------------- | ---- |
+| GET    | `/api/users/me`          | Obtener perfil del usuario actual     | ✅   |
+| PUT    | `/api/users/me`          | Actualizar perfil del usuario actual  | ✅   |
+| PUT    | `/api/users/me/password` | Cambiar contraseña del usuario actual | ✅   |
 
 ### Grupos (`/api/groups`)
-| Método | Endpoint | Descripción | Auth |
-|---------|-----------|-------------|-------|
-| GET | `/api/groups` | Listar grupos del usuario | ✅ |
-| POST | `/api/groups` | Crear nuevo grupo | ✅ |
-| GET | `/api/groups/{id}` | Obtener detalle de grupo | ✅ |
-| DELETE | `/api/groups/{id}` | Eliminar grupo (soft delete) | ✅ |
-| POST | `/api/groups/{id}/users` | Agregar usuario a grupo | ✅ |
-| DELETE | `/api/groups/{id}/users/{userId}` | Eliminar usuario de grupo | ✅ |
+
+| Método | Endpoint                          | Descripción                  | Auth |
+| ------ | --------------------------------- | ---------------------------- | ---- |
+| GET    | `/api/groups`                     | Listar grupos del usuario    | ✅   |
+| POST   | `/api/groups`                     | Crear nuevo grupo            | ✅   |
+| GET    | `/api/groups/{id}`                | Obtener detalle de grupo     | ✅   |
+| DELETE | `/api/groups/{id}`                | Eliminar grupo (soft delete) | ✅   |
+| POST   | `/api/groups/{id}/users`          | Agregar usuario a grupo      | ✅   |
+| DELETE | `/api/groups/{id}/users/{userId}` | Eliminar usuario de grupo    | ✅   |
 
 ### Gastos (`/api/expenses`)
-| Método | Endpoint | Descripción | Auth |
-|---------|-----------|-------------|-------|
-| POST | `/api/expenses` | Crear nuevo gasto | ✅ |
-| GET | `/api/expenses/{id}` | Obtener detalle de gasto | ✅ |
-| PUT | `/api/expenses/{id}` | Actualizar gasto | ✅ |
-| DELETE | `/api/expenses/{id}` | Eliminar gasto (soft delete) | ✅ |
+
+| Método | Endpoint             | Descripción                  | Auth |
+| ------ | -------------------- | ---------------------------- | ---- |
+| POST   | `/api/expenses`      | Crear nuevo gasto            | ✅   |
+| GET    | `/api/expenses/{id}` | Obtener detalle de gasto     | ✅   |
+| PUT    | `/api/expenses/{id}` | Actualizar gasto             | ✅   |
+| DELETE | `/api/expenses/{id}` | Eliminar gasto (soft delete) | ✅   |
 
 ### Pagos (`/api/groups/{groupId}/payments`)
-| Método | Endpoint | Descripción | Auth |
-|---------|-----------|-------------|-------|
-| POST | `/api/groups/{groupId}/payments` | Registrar nuevo pago | ✅ |
-| GET | `/api/groups/{groupId}/payments` | Listar pagos del grupo | ✅ |
+
+| Método | Endpoint                         | Descripción            | Auth |
+| ------ | -------------------------------- | ---------------------- | ---- |
+| POST   | `/api/groups/{groupId}/payments` | Registrar nuevo pago   | ✅   |
+| GET    | `/api/groups/{groupId}/payments` | Listar pagos del grupo | ✅   |
 
 ### Balances (`/api/groups/{groupId}/balances`)
-| Método | Endpoint | Descripción | Auth |
-|---------|-----------|-------------|-------|
-| GET | `/api/groups/{groupId}/balances` | Obtener balances simplificados del grupo | ✅ |
+
+| Método | Endpoint                         | Descripción                              | Auth |
+| ------ | -------------------------------- | ---------------------------------------- | ---- |
+| GET    | `/api/groups/{groupId}/balances` | Obtener balances simplificados del grupo | ✅   |
 
 ## 🔧 Configuración
 
 ### appsettings.json
+
 ```json
 {
   "ConnectionStrings": {
@@ -209,6 +226,7 @@ dotnet run
 ```
 
 ### Variables de Entorno (.env)
+
 ```bash
 # SQL Server password
 MSSQL_SA_PASSWORD=TU_PASSWORD_SEGURO_AQUI
@@ -221,16 +239,19 @@ JWT_SECRET=TU_JWT_SECRET_MIN_32_CHARS
 ### Connection Strings por Provider
 
 **SQL Server**:
+
 ```
 Server=localhost,1433;Database=splitwise_dev;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=True
 ```
 
 **PostgreSQL**:
+
 ```
 Host=localhost;Port=5432;Database=splitwise_dev;Username=postgres;Password=YOUR_PASSWORD
 ```
 
 **SQLite**:
+
 ```
 Data Source=app.db
 ```
@@ -240,15 +261,18 @@ Data Source=app.db
 El proyecto soporta 3 proveedores de base de datos mediante detección automática:
 
 ### SQL Server (Recomendado para desarrollo)
+
 - Requiere Docker
 - Configuración en `docker-compose.yml`
 - Connection string debe contener "Server="
 
 ### PostgreSQL (Opcional)
+
 - Configuración manual requerida
 - Connection string debe contener "Host=" o "Server=" y "Port=5432"
 
 ### SQLite (Por defecto para desarrollo rápido)
+
 - No requiere Docker
 - Connection string debe ser "Data Source=app.db"
 - Base de datos creada automáticamente
@@ -256,6 +280,7 @@ El proyecto soporta 3 proveedores de base de datos mediante detección automáti
 ## 📝 Ejemplo de Uso
 
 ### 1. Registrar usuario
+
 ```bash
 curl -X POST http://localhost:5180/api/auth/register \
   -H "Content-Type: application/json" \
@@ -267,6 +292,7 @@ curl -X POST http://localhost:5180/api/auth/register \
 ```
 
 ### 2. Login
+
 ```bash
 curl -X POST http://localhost:5180/api/auth/login \
   -H "Content-Type: application/json" \
@@ -277,6 +303,7 @@ curl -X POST http://localhost:5180/api/auth/login \
 ```
 
 Response:
+
 ```json
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -286,6 +313,7 @@ Response:
 ```
 
 ### 3. Acceder a endpoint protegido
+
 ```bash
 curl -X GET http://localhost:5180/api/users/me \
   -H "Authorization: Bearer TU_ACCESS_TOKEN"
@@ -323,21 +351,25 @@ dotnet test
 ## 🐛 Troubleshooting
 
 ### SQL Server no inicia
+
 - Verificar que Docker está corriendo: `docker ps`
 - Verificar puerto 1433 no esté en uso: `netstat -tulpn | grep 1433` o `ss -tulpn | grep 1433`
 - Primera vez descarga imagen puede tardar ~2-3 minutos
 
 ### Error de conexión a BD
+
 - Verificar `.env` tiene `DB_PASSWORD` correcto
 - Verificar connection string en `Program.cs` usa variables de entorno
 - Verificar Docker container está "healthy": `docker-compose ps`
 
 ### Migraciones fallan
+
 - Verificar `dotnet-ef` está instalado: `dotnet ef --version`
 - Agregar al PATH: `export PATH="$PATH:$HOME/.dotnet/tools"`
 - Especificar connection string: `dotnet ef database update --connection "...`
 
 ### API no inicia
+
 - Verificar puerto 5180 no esté en uso: `netstat -tulpn | grep 5180` o `ss -tulpn | grep 5180`
 - Verificar logs de errores: `dotnet run` (ver output en consola)
 
@@ -353,16 +385,19 @@ dotnet test
 ## 🔄 Migraciones
 
 Las migraciones de Entity Framework Core se commitean a GitHub. Son necesarias para:
+
 - Versionar cambios en el esquema de BD
 - Permitir a otros devs recrear la BD
 - Mantener sincronizado código y BD
 
 **Archivos que se commitean**:
+
 - ✅ `Migrations/*.cs` - Código de migraciones
 - ✅ `Migrations/*.Designer.cs` - Snapshots de modelos
 - ✅ `AppDbContextModelSnapshot.cs` - Snapshot del modelo actual
 
 **Archivos que NO se commitean**:
+
 - ❌ `.env` - Variables de entorno (secretos)
 - ❌ `appsettings.*.json` - Configuración local (Development, etc.)
 - ❌ `app.db` - Datos locales de SQLite
@@ -400,7 +435,7 @@ Este proyecto es un portfolio personal para demostrar habilidades en desarrollo 
 
 ## 👨‍💻 Autor
 
-[Zrisan](https://github.com/zrisan)
+[Zrisan](https://github.com/ZrisanDev)
 
 ---
 
