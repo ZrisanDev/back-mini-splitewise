@@ -10,10 +10,25 @@ using back_api_splitwise.src.DTOs.Users;
 using back_api_splitwise.src.Extensions;
 using back_api_splitwise.src.Helpers;
 using back_api_splitwise.src.Services.Interfaces;
+using DotNetEnv;
 using FluentValidation;
 using Microsoft.OpenApi.Models;
 
+// Cargar variables de entorno desde .env
+Env.Load();
+
+// Reemplazar variables de entorno en la connection string
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "YourStrong!Passw0rd";
+var connectionString = $"Server=localhost,1433;Database=splitwise_dev;User Id=sa;Password={dbPassword};TrustServerCertificate=True";
+
+// Reemplazar JWT secret de entorno
+var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET") ?? "dev-secret-key-replace-in-production-at-least-32-chars";
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Sobrescribir la connection string y JWT secret con las variables de entorno
+builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+builder.Configuration["Jwt:SecretKey"] = jwtSecret;
 
 // ── Services ─────────────────────────────────────────────────────────────────
 builder.Services.AddApplicationServices(builder.Configuration);

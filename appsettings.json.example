@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "DB_CONNECTION_STRING_FROM_ENV"
+    "DefaultConnection": "Server=localhost,1433;Database=splitwise_dev;User Id=sa;Password=YOUR_DB_PASSWORD;TrustServerCertificate=True"
   },
   "Logging": {
     "LogLevel": {
@@ -12,6 +12,6 @@
   "Jwt": {
     "Issuer": "back-api-splitwise",
     "Audience": "back-api-splitwise-client",
-    "SecretKey": "JWT_SECRET_FROM_ENV"
+    "SecretKey": "YOUR_JWT_SECRET_MIN_32_CHARS"
   }
 }
